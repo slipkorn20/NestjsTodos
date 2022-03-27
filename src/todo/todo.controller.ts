@@ -80,7 +80,7 @@ export class TodoController {
     // }
   }
   @Put(':id')
-  // UsePipes(ValidationPipe)
+  UsePipes(ValidationPipe)
   UpdateTodo(@Param('id') id: string, @Body() data: UpdateTodoDto) {
     //  this.todoService.update(data)
     // const updatedTodo = this.todoService.updateOneTodo(id,data);
