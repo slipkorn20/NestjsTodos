@@ -7,7 +7,8 @@ import { Todo } from '../interface/todo.interface';
 import { UpdateTodoDto } from 'src/dto/update-todo.dto';
 import { stringify } from 'querystring';
 import { GetAllTodosDto } from 'src/dto/get-all-todos.dto';
-import { query } from 'express';
+
+
 
 @Injectable()
 export class TodoService {
@@ -17,16 +18,21 @@ export class TodoService {
     private todoModel: Model<Todo>,
   ) {}
 
-  async getAllTodos(data: GetAllTodosDto) {
+  async getAllTodos(data: GetAllTodosDto) : Promise<any[]>{
     // console.log(data);
     const query = this.todoModel.find(data.searchBy);
     if (data.fields) {
       query.select(data.fields);
     }
     if (data.sort) {
+      
       query.sort(data.sort);
+    }else {
+      query.sort('-dateCreated')
     }
+
     if (data.limit) {
+
       const limit = Number(data.limit);
       const page = data.page ? Number(data.page) - 1 : 0;
 
@@ -38,16 +44,18 @@ export class TodoService {
     }
     const result = await query;
 
-    return result.map((todo) => ({
+   return result.map((todo) => ({
       id: todo._id,
       text: todo.text,
       author: todo.author,
       status: todo.status,
       dateCreated: todo.dateCreated,
     }));
+    
+    
   }
 
-  async getOneTodo(id: string) {
+  async getOneTodo(id: string): Promise<Todo> {
     const foundTodo = await this.todoModel.findById(id);
     return foundTodo;
   }
@@ -72,7 +80,7 @@ export class TodoService {
     // return newTodo;
   }
 
-  async deleteOneTodo(id: string) {
+  async deleteOneTodo(id: string): Promise<Todo> {
     const result = await this.todoModel.findByIdAndDelete(id);
     return result;
   }
