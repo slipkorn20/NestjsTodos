@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommentDto } from 'src/dto/comment-create.dto';
-import { Comment } from '../interface/comments.interface';
+import { Comment } from '../../interface/comments.interface';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
