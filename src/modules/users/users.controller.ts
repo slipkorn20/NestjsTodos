@@ -4,10 +4,13 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateUser } from 'src/dto/create-user.dto';
+import { getAllUsersTodos } from 'src/dto/get-all-user-todos.dto';
+import { LoginDto } from 'src/dto/login.dto';
 import {
   getErrorMessage,
   getSuccessMessage,
@@ -41,7 +44,19 @@ export class UsersController {
   }
 
   @Get('/:userId/todos')
-  async getUserTodos(@Param('userId')userId) {
-     return await this.usersService.getAllUserTodos(userId)
+  async getUserTodos(@Param('userId') userId, @Query() query: getAllUsersTodos) {
+    return await this.usersService.getAllUserTodos(userId, query);
+  }
+
+  @Post('/login')
+  async loginUser(@Body() data: LoginDto){
+   const result = await this.usersService.LoginUser(data);
+
+  if(result){
+    return getSuccessMessage(result);
+  } else {
+    return getErrorMessage('Username or password incorrect')
+  }
+
   }
 }

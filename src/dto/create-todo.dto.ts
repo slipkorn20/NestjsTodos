@@ -6,8 +6,8 @@ export class CreateTodoDto {
     @IsString()
     text: string;
     @IsString()
-    @IsOptional()
-    @MinLength(3)
+    // @IsOptional()
+    // @MinLength(3)
     author?: string;
     @IsEnum(TodoStatus)
     @IsOptional()
@@ -15,4 +15,6 @@ export class CreateTodoDto {
     @IsDate()
     @IsOptional()
     date: Date
+    // @IsString()
+    // userId: string;
 }
