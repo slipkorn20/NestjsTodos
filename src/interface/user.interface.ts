@@ -8,5 +8,6 @@ export interface User {
   fullName: string;
   registrationDate: Date;
   userRole: UserRole;
-  token?: string
+  token?: string;
+  salt?:string;
 }

@@ -15,6 +15,11 @@ class User {
   userRole: UserRole;
   @Prop({required: false, type : 'string'})
   token?: string;
+  @Prop({required: true, type: 'string'})
+  salt?:string
+  @Prop({requierd: false, type: 'date'})
+  loginDate: Date
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

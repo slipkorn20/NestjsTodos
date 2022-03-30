@@ -9,6 +9,7 @@ import { LoginDto } from 'src/dto/login.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { getAllUsersTodos } from 'src/dto/get-all-user-todos.dto';
 import { sha256 } from 'js-sha256';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,8 @@ export class UsersService {
     private todoModel: Model<Todo>,
   ) {}
   async createUser(data: CreateUser): Promise<User> {
-    const hashedPass = sha256(data.password)
+    const salt = await bcrypt.genSalt();
+    const hashedPass = await bcrypt.hash(data.password, salt);
     // Implement creation
     const newUser = new this.userModel({
       email: data.email,
@@ -27,6 +29,7 @@ export class UsersService {
       fullName: data.fullName,
       userRole: UserRole.regular,
       registrationDate: new Date(),
+      salt,
     });
     await newUser.save();
 
@@ -60,7 +63,7 @@ export class UsersService {
       const result = this.todoModel.find();
       result.where('author').equals(id);
       return await result;
-    }else {
+    } else {
       return false;
     }
     // const result = await this.todoModel.find({
@@ -69,23 +72,34 @@ export class UsersService {
     // return result;
   }
   async LoginUser(data: LoginDto) {
-    const hashedPass = sha256(data.password)
+    // const hashedPass = sha256(data.password)
 
     const findUser = await this.userModel.findOne({
       email: data.email,
-      password: hashedPass,
+      // password: hashedPass,
     });
-    findUser.isSelected('fullName id email');
+    findUser.isSelected('fullName id email salt');
 
     const foundUser = await findUser;
+    if (!foundUser) {
+      return false;
+    }
 
-    if (foundUser) {
+    const isPasswordMatch = await bcrypt.compare(
+      data.password,
+      foundUser.password,
+    );
+    if (isPasswordMatch) {
       // Generate token.
-      const token =
-        String(Math.random()) + String(uuidv4()) + String(Date.now());
+      const token = sha256(
+        String(Math.random()) +
+          String(uuidv4()) +
+          String(Date.now() + foundUser.id),
+      );
       // Set token in DB
       await this.userModel.findByIdAndUpdate(foundUser.id, {
         token,
+        loginDate: new Date(),
       });
       return {
         user: foundUser,
@@ -94,7 +108,7 @@ export class UsersService {
     }
     return false;
   }
-  async findUserByToken(token: string):Promise<User> {
+  async findUserByToken(token: string): Promise<User> {
     const foundUser = await this.userModel.findOne({
       token,
     });
