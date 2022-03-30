@@ -15,6 +15,8 @@ export class CreateTodoDto {
     @IsDate()
     @IsOptional()
     date: Date
+    @IsString()
+    token:string
     // @IsString()
     // userId: string;
 }

@@ -8,6 +8,7 @@ import { Todo } from 'src/interface/todo.interface';
 import { LoginDto } from 'src/dto/login.dto';
 import { v4 as uuidv4 } from 'uuid';
 import { getAllUsersTodos } from 'src/dto/get-all-user-todos.dto';
+import { sha256 } from 'js-sha256';
 
 @Injectable()
 export class UsersService {
@@ -18,10 +19,11 @@ export class UsersService {
     private todoModel: Model<Todo>,
   ) {}
   async createUser(data: CreateUser): Promise<User> {
+    const hashedPass = sha256(data.password)
     // Implement creation
     const newUser = new this.userModel({
       email: data.email,
-      password: data.password,
+      password: hashedPass,
       fullName: data.fullName,
       userRole: UserRole.regular,
       registrationDate: new Date(),
@@ -61,16 +63,17 @@ export class UsersService {
     }else {
       return false;
     }
-
     // const result = await this.todoModel.find({
     //   author: id,
     // });
     // return result;
   }
   async LoginUser(data: LoginDto) {
+    const hashedPass = sha256(data.password)
+
     const findUser = await this.userModel.findOne({
       email: data.email,
-      password: data.password,
+      password: hashedPass,
     });
     findUser.isSelected('fullName id email');
 

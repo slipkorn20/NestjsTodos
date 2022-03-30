@@ -44,19 +44,25 @@ export class UsersController {
   }
 
   @Get('/:userId/todos')
-  async getUserTodos(@Param('userId') userId, @Query() query: getAllUsersTodos) {
-    return await this.usersService.getAllUserTodos(userId, query);
+  async getUserTodos(
+    @Param('userId') userId,
+    @Query() query: getAllUsersTodos,
+  ) {
+    const result = await this.usersService.getAllUserTodos(userId, query);
+    if (result) {
+      return getSuccessMessage(result);
+    }
+    return getErrorMessage('Could not get todos');
   }
 
   @Post('/login')
-  async loginUser(@Body() data: LoginDto){
-   const result = await this.usersService.LoginUser(data);
+  async loginUser(@Body() data: LoginDto) {
+    const result = await this.usersService.LoginUser(data);
 
-  if(result){
-    return getSuccessMessage(result);
-  } else {
-    return getErrorMessage('Username or password incorrect')
-  }
-
+    if (result) {
+      return getSuccessMessage(result);
+    } else {
+      return getErrorMessage('Username or password incorrect');
+    }
   }
 }
