@@ -44,7 +44,6 @@ export class TodoService {
     }
 query.populate('author', 'id email fullName')
 
-
     const result = await query;
 
     const todoResults : Todo[] = result.map((todo) => ({

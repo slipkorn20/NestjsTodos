@@ -78,7 +78,7 @@ export class UsersService {
       email: data.email,
       // password: hashedPass,
     });
-    findUser.isSelected('fullName id email salt');
+    // findUser.isSelected('fullName id email password');
 
     const foundUser = await findUser;
     if (!foundUser) {
@@ -102,7 +102,11 @@ export class UsersService {
         loginDate: new Date(),
       });
       return {
-        user: foundUser,
+        user: {
+          email: foundUser.email,
+          fullName:foundUser.fullName,
+          id: foundUser.id,
+        },
         token,
       };
     }
