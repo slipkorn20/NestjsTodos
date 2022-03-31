@@ -6,16 +6,17 @@ import { HttpBearerStrategy } from '../auth/http-bearer.strategy';
 import { TodoController } from './todo.controller';
 import { TodoService } from './todo.service';
 import { PassportModule } from '@nestjs/passport';
- 
-@Module({
-  imports: [MongooseModule.forFeature([{ name: 'Todo', schema: TodoSchema }]),
-   MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-   PassportModule,
-   HttpBearerStrategy,
+import { UsersModule } from '../users/users.module';
 
-],
+@Module({
+  imports: [
+    MongooseModule.forFeature([{ name: 'Todo', schema: TodoSchema }]),
+    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+    // PassportModule,
+    // HttpBearerStrategy,
+    UsersModule,
+  ],
   controllers: [TodoController],
-  providers: [TodoService],
- 
+  providers: [TodoService, HttpBearerStrategy],
 })
 export class TodoModule {}

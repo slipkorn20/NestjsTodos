@@ -15,7 +15,7 @@ import { HttpBearerStrategy } from './modules/auth/http-bearer.strategy';
 @Module({
   imports: [
     AuthModule,
-    HttpBearerStrategy,
+    
     TodoModule,
     CommentsModule,
     MongooseModule.forRoot(

@@ -5,9 +5,12 @@ import {
   Param,
   Post,
   Query,
+  Req,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { CreateUser } from 'src/dto/create-user.dto';
 import { getAllUsersTodos } from 'src/dto/get-all-user-todos.dto';
 import { LoginDto } from 'src/dto/login.dto';
@@ -38,17 +41,16 @@ export class UsersController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('bearer'))
   async getUsers() {
     const result = await this.usersService.getAllUsers();
     return getSuccessMessage(result);
   }
 
   @Get('/:userId/todos')
-  async getUserTodos(
-    @Param('userId') userId,
-    @Query() query: getAllUsersTodos,
-  ) {
-    const result = await this.usersService.getAllUserTodos(userId, query);
+  @UseGuards(AuthGuard('bearer'))
+  async getUserTodos(@Req() req) {
+    const result = await this.usersService.getAllUserTodos(req.user);
     if (result) {
       return getSuccessMessage(result);
     }

@@ -57,15 +57,12 @@ export class UsersService {
     }
     return [];
   }
-  async getAllUserTodos(id: string, query: getAllUsersTodos) {
-    const loggedInUser = await this.findUserByToken(query.token);
-    if (loggedInUser && loggedInUser.id === id) {
+  async getAllUserTodos(user: User) {
+     
       const result = this.todoModel.find();
-      result.where('author').equals(id);
+      result.where('author').equals(user.id);
       return await result;
-    } else {
-      return false;
-    }
+    
     // const result = await this.todoModel.find({
     //   author: id,
     // });

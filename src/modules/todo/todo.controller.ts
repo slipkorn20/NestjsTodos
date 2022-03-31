@@ -12,6 +12,7 @@ import {
   ValidationPipe,
   Headers,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 // import { CreateTodoDto } from 'src/dto/create-todo.dto';
 import { Todo } from 'src/interface/todo.interface';
@@ -26,20 +27,21 @@ import {
 import { AuthGuard }  from '@nestjs/passport'
 
 @Controller('todo')
+
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get()
   @UsePipes(ValidationPipe)
   @UseGuards(AuthGuard('bearer'))
-  async getAllTodos(@Query() data: GetAllTodosDto) {
-    return 'success'
-    // try {
-    //   const todos = await this.todoService.getAllTodos(data);
-    //   return getSuccessMessage(todos);
-    // } catch (err) {
-    //   return getErrorMessage('Could not get todos with given params');
-    // }
+  async getAllTodos(@Query() data: GetAllTodosDto, @Req() req) {
+    console.log(req)
+    try {
+      const todos = await this.todoService.getAllTodos(data);
+      return getSuccessMessage(todos);
+    } catch (err) {
+      return getErrorMessage('Could not get todos with given params');
+    }
   }
 
   @Get(':id')
