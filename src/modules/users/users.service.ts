@@ -19,6 +19,7 @@ export class UsersService {
     @InjectModel('Todo')
     private todoModel: Model<Todo>,
   ) {}
+  
   async createUser(data: CreateUser): Promise<User> {
     const salt = await bcrypt.genSalt();
     const hashedPass = await bcrypt.hash(data.password, salt);
@@ -57,7 +58,7 @@ export class UsersService {
     }
     return [];
   }
-  async getAllUserTodos(id : String) {
+  async getAllUserTodos(id:String) {
      
       const result = this.todoModel.find();
       result.where('author').equals(id);
@@ -69,11 +70,9 @@ export class UsersService {
     // return result;
   }
   async LoginUser(data: LoginDto) {
-    // const hashedPass = sha256(data.password)
 
     const findUser = await this.userModel.findOne({
       email: data.email,
-      // password: hashedPass,
     });
     // findUser.isSelected('fullName id email password');
 
@@ -83,8 +82,8 @@ export class UsersService {
     }
 
     const isPasswordMatch = await bcrypt.compare(
-      data.password,
-      foundUser.password,
+      data.password, // გადმოგვაწოდა ფრონტმა, an postmanenma
+      foundUser.password, // ამოვიღეთ დატაბაზიდან
     );
     if (isPasswordMatch) {
       // Generate token.

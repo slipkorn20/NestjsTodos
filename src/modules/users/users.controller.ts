@@ -28,6 +28,7 @@ export class UsersController {
   async createUser(@Body() data: CreateUser) {
     try {
       const result = await this.usersService.createUser(data);
+       return getSuccessMessage(result)
     } catch (err) {
       if (err.code === 11000) {
         return getErrorMessage(
@@ -50,6 +51,7 @@ export class UsersController {
   @Get('/:userId/todos')
   @UseGuards(AuthGuard('bearer'))
   async getUserTodos(@Req() req) {
+    console.log('Getting todos for user',req.user)
     const result = await this.usersService.getAllUserTodos(req.user.id);
     if (result) {
       return getSuccessMessage(result);

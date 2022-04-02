@@ -12,7 +12,7 @@ export class HttpBearerStrategy extends PassportStrategy(Strategy) {
   async validate(token: string) {
     const foundUser = await this.usersService.findUserByToken(token);
     if (foundUser) {
-      return true;
+      return foundUser;
     } else {
       return false;
     }
