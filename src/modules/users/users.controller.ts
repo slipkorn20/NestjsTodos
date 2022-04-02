@@ -49,9 +49,7 @@ export class UsersController {
 
   @Get('/:userId/todos')
   @UseGuards(AuthGuard('bearer'))
-  async getUserTodos(
-    @Req() req)
-     {
+  async getUserTodos(@Req() req) {
     const result = await this.usersService.getAllUserTodos(req.user.id);
     if (result) {
       return getSuccessMessage(result);
