@@ -57,10 +57,10 @@ export class UsersService {
     }
     return [];
   }
-  async getAllUserTodos(user: User) {
+  async getAllUserTodos(id : String) {
      
       const result = this.todoModel.find();
-      result.where('author').equals(user.id);
+      result.where('author').equals(id);
       return await result;
     
     // const result = await this.todoModel.find({

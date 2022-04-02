@@ -16,9 +16,9 @@ class User {
   @Prop({required: false, type : 'string'})
   token?: string;
   @Prop({required: true, type: 'string'})
-  salt?:string
+  salt?:string;
   @Prop({requierd: false, type: 'date'})
-  loginDate: Date
+  loginDate: Date;
 
 }
 

@@ -68,10 +68,6 @@ query.populate('author', 'id email fullName')
   }
 
   async createTodo(data: CreateTodoDto) {
-    const user = await this.userModel.findById(data.author)
- if(!user || user.token !== data.token) {
-   throw new Error();
- }
 
     const createdTodo = new this.todoModel({
       ...data,

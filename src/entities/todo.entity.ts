@@ -6,7 +6,6 @@ import { UserSchema } from './user.entity';
 @Schema()
 class Todo {
   
-
   @Prop({ required: true, type: 'string' })
   text: string;
   // @Prop({ required: true, type: 'string' })
